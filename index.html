@@ -71,7 +71,11 @@
                     {data: 'status'},
                     {data: 'ctime'},
                     {data: 'ltime'},
-                    {data: 'type'}
+                    {data: 'type'},
+                    {data: null,
+                      render: function(data,type,row) {
+                        return '<button>删除</button><button>修改</button><button>查询</button>'
+                    }}
                 ],
                 "autoWidth": true,//自适应宽度
                 "searching": false,//关闭搜索框
