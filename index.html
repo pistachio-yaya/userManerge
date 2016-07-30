@@ -54,7 +54,16 @@
 
         ]
         var table = $('#example').DataTable({
-                data:data,
+                // data:data,
+                "ajax": {
+                    "type": "get",
+                    "url": './testJson/search.json',
+                    "data": function (d) {
+                          //添加额外的参数传给服务器
+                          d.extra_search = $('#reportrange span').html();
+                          d.oa_state = $('#oastate').val();
+                    },
+                }, 
                 columns: [
                     {data: 'id'},
                     {data: 'name'},
@@ -144,31 +153,7 @@
                    $('#reportrange span').html(start.format('YYYY-MM-DD HH:mm:ss') + ' - ' + end.format('YYYY-MM-DD HH:mm:ss'));
                });
  
-       //设置日期菜单被选项  --开始--
-       var dateOption ;
-       if("${riqi}"=='day') {
-            console.log("${riqi}")
-           dateOption = "今----日";
-       }else if("${riqi}"=='yday') {
-           dateOption = "昨日";
-       }else if("${riqi}"=='week'){
-           dateOption ="最近7日";
-       }else if("${riqi}"=='month'){
-           dateOption ="最近30日";
-       }else if("${riqi}"=='year'){
-           dateOption ="最近一年";
-       }else{
-           dateOption = "自定义";
-       }
-       $(".daterangepicker").find("li").each(function (){
-           if($(this).hasClass("active")){
-               $(this).removeClass("active");
-           }
-           if(dateOption==$(this).html()){
-               $(this).addClass("active");
-           }
-       });
-       //设置日期菜单被选项  --结束--
+
  
  
        //选择时间后触发重新加载的方法
