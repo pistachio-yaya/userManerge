@@ -6,12 +6,14 @@
         <link rel="stylesheet" href="./css/bootstrap-theme.min.css">
         <link rel="stylesheet" href="./css/dataTables.bootstrap.min.css">
         <link rel="stylesheet" href="./css/daterangepicker.min.css">
+        <link rel="stylesheet" href="./css/select2.min.css">
         <script src="./js/jquery.min.js"></script>
         <script src="./js/bootstrap.min.js"></script>
         <script src="./js/jquery.dataTables.js"></script>
         <script src="./js/dataTables.bootstrap.min.js"></script>
         <script src="./js/moment.min.js"></script>
         <script src="./js/daterangepicker.min.js"></script>
+        <script src="./js/select2.min.js"></script>
     </head>
     <body>
     <nav class="navbar navbar-default">
@@ -31,7 +33,7 @@
     </nav>
     <div class="container">
         <div class="row">
-          <button class="btn btn-primary" id="addItem" data-toggle="modal" data-target="#addModel">新增</button>
+          <button class="btn btn-primary" id="addItem" data-toggle="modal" >新增</button>
         </div>
         <div  class="row">
         <table id="example" class="table table-striped table-bordered" cellspacing="0" >
@@ -71,7 +73,7 @@
    aria-labelledby="myModalLabel" aria-hidden="true">
    <div class="modal-dialog">
       <div class="modal-content">
-        <form id="edit-form" action="" class="form-horizontal">
+        <form id="edit-form" action="/" class="form-horizontal">
          <div class="modal-header">
             <button type="button" class="close" 
                data-dismiss="modal" aria-hidden="true">
@@ -106,8 +108,15 @@
                 <div class="form-group">
                          <label class="col-sm-2 control-label">帐号类型</label>
                          <div class="col-sm-10">
-                         <input type="text" name="type" class="form-control" placeholder="帐号类型">
+                         <select class="J-select col-md-12" >
+                                <option value="1">类型一</option>
+                                <option value="2">类型二</option>
+                                <option value="3">类型三</option>
+                                <option value="4">类型四</option>
+                        </select>
                          </div>
+
+
                 </div>
                 <br>
                 <div class="form-group">
@@ -124,7 +133,7 @@
                 <br>
          </div>
          <div class="modal-footer">
-            <button type="button" class="btn btn-primary">
+            <button type="submit" class="btn btn-primary">
                提交更改
             </button>
          </div>
@@ -177,10 +186,10 @@
                     {data: 'type'},
                     {data: null,
                       render: function(data,type,row) {
-                        return '<div class="btn-group"><button class="btn btn-danger">删除</button>'+
-                                    '<button class="btn btn-warning">封存</button>'+
-                                    '<button class="btn btn-primary">修改</button>'+
-                                    '<button class="btn btn-primary">启封</button></div>';
+                        return '<div class="btn-group"><button class="btn btn-danger J-del">删除</button>'+
+                                    '<button class="btn btn-warning J-stop">封存</button>'+
+                                    '<button class="btn btn-primary J-edit">修改</button>'+ 
+                                    '<button class="btn btn-primary j-restop">启封</button></div>';
                     }}
                 ],
                 "autoWidth": true,//自适应宽度
@@ -265,15 +274,56 @@
      
            //选择时间后触发重新加载的方法
            $("#reportrange").on('apply.daterangepicker',function(date,d){
-               //当选择时间后，出发dt的重新加载数据的方法
                start = d.startDate._d.getTime()
                end = d.endDate._d.getTime()
                table.draw();
-               //获取dt请求参数
-               // var args = table.ajax.params();
-               // console.log("额外传到后台的参数值extra_search为："+args.extra_search);
            });
+
+           // 新增操作
+           $('#addItem').click(function() {
+                 $(":input").val('');
+                 $('#addModel').modal('show');
+           })
+           // 删除操作
+           $('.J-del').click(function () {
+                var tr = $(this).parents('tr')
+                var data = table.row(tr).data()
+                // 传输数据到后台，后台沒接口就不实现啦
+           })
+           // 编辑操作
+           $('.J-edit').click(function () {
+                var tr = $(this).parents('tr')
+                var data = table.row(tr).data()
+                for (var key in data) {
+                        $(":input[name="+key+"]").val(data[key])
+                }
+                $('#addModel').modal('show');
+           })
+           // 封存操作
+           $('.J-stop').click(function () {
+                var tr = $(this).parents('tr')
+                var data = table.row(tr).data()
+                // 传输数据到后台，后台沒接口就不实现啦
+                // 
+           })
+           // 起风操
+           $('.j-restop').click(function () {
+                var tr = $(this).parents('tr')
+                var data = table.row(tr).data()
+               // 传输数据到后台，后台沒接口就不实现啦
+           })
      
         }
+       $('.J-select').select2();
+        $('#example tbody').on( 'click', 'tr', function () {
+                if ( $(this).hasClass('selected') ) {
+                        $(this).removeClass('selected');
+                }
+                else {
+                        table.$('tr.selected').removeClass('selected');
+                        $(this).addClass('selected');
+                }
+        } );
+       console.log($("#example tr"))
     </script>
 </html>
